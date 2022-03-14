@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import libtbx.load_env
 
@@ -28,7 +29,9 @@ def detect_architecture(verbose=True):
 #print("LUNUS: Imported kokkos_env KOKKOS_PATH = {0}\n".format(kokkos_env['KOKKOS_PATH']))
 
 if os.getenv('LUNUS_KOKKOS_ARCH') is None:
-  os.environ['LUNUS_KOKKOS_ARCH'] = detect_architecture()
+  os.environ['LUNUS_KOKKOS_ARCH'] = 'HSW'
+  if shutil.which('nvidia-smi') is not None:
+    os.environ['LUNUS_KOKKOS_ARCH'] = detect_architecture()
 if os.getenv('LUNUS_KOKKOS_DEVICES') is None:
   if (os.environ['LUNUS_KOKKOS_ARCH'] == 'Volta70') or (os.environ['LUNUS_KOKKOS_ARCH'] == 'Ampere80'):
     os.environ['LUNUS_KOKKOS_DEVICES'] = 'Cuda'
@@ -38,7 +41,7 @@ if os.getenv('LUNUS_KOKKOS_PATH') is None:
   os.environ['LUNUS_KOKKOS_PATH'] = libtbx.env.under_dist('simtbx', '../../kokkos')
 
 if os.environ['LUNUS_KOKKOS_ARCH'] == 'Volta70':
-  kokkos_cxxflags = ['-arch=sm_70','-std=c++14']	
+  kokkos_cxxflags = ['-arch=sm_70','-std=c++14']
 elif os.environ['LUNUS_KOKKOS_ARCH'] == 'Ampere80':
   kokkos_cxxflags = ['-arch=sm_80','-std=c++14']
 else:
@@ -104,4 +107,3 @@ if (env_etc.enable_kokkos):
     source = kokkos_src)
 
   env.Prepend(LIBS=["liblunus_kokkos"])
-
