@@ -30,23 +30,23 @@ CPPP = os.path.join(env_etc.lunus_include,"c","include")
 env_lunus = env_base.Clone(SHLINKFLAGS=env_etc.shlinkflags)
 
 replacement_ccflags = []
-for f in env_lunus["CCFLAGS"]:
- if (f not in ["-ffast-math"]):
-   replacement_ccflags.append(f)
-env_lunus.Replace(CCFLAGS = replacement_ccflags)
+# for f in env_lunus["CCFLAGS"]:
+#  if (f not in ["-ffast-math"]):
+#    replacement_ccflags.append(f)
+# env_lunus.Replace(CCFLAGS = replacement_ccflags)
 
-replacement_shcxxflags = []
-for f in env_lunus["SHCXXFLAGS"]:
- if (f not in ["-ffast-math"]):
-   replacement_shcxxflags.append(f)
-env_lunus.Replace(SHCXXFLAGS = replacement_shcxxflags)
+# replacement_shcxxflags = []
+# for f in env_lunus["SHCXXFLAGS"]:
+#  if (f not in ["-ffast-math"]):
+#    replacement_shcxxflags.append(f)
+# env_lunus.Replace(SHCXXFLAGS = replacement_shcxxflags)
 
-env_lunus.Prepend(CCFLAGS=["-Xpreprocessor"])
+# env_lunus.Prepend(CCFLAGS=["-Xpreprocessor"])
 
-if (env_etc.have_openmp):
-  env_lunus.Prepend(CCFLAGS=["-DUSE_OPENMP"])
-  env_lunus.Prepend(SHCXXFLAGS=["-DUSE_OPENMP"])
-  env_lunus.Prepend(LIBS=["gomp"])
+# if (env_etc.have_openmp):
+#   env_lunus.Prepend(CCFLAGS=["-DUSE_OPENMP"])
+#   env_lunus.Prepend(SHCXXFLAGS=["-DUSE_OPENMP"])
+#   env_lunus.Prepend(LIBS=["gomp"])
 if sys.platform.startswith('linux') and env_etc.enable_kokkos:
   kokkos_flags = ["-DUSE_KOKKOS","-DLUNUS_NUM_JBLOCKS=16","-DLUNUS_NUM_IBLOCKS=8"]
   env_lunus.Prepend(CCFLAGS=kokkos_flags)
@@ -126,4 +126,3 @@ if (not env_etc.no_boost_python):
   else:
     if sys.platform.startswith('linux') and env_etc.enable_cuda:
       env_lunus.SConscript("lunus/cuda/SConscript",exports={ 'env' : env_lunus })
-
